@@ -19,6 +19,10 @@ class FirebaseConfig {
         database = setDatabase().child("information")
         return database
     }
+    fun fetchPertanyaanOtomatis(): DatabaseReference{
+        database = setDatabase().child("pertanyaan")
+        return database
+    }
     fun getInformation(): ArrayList<InformationDataModel>{
         val databaseInformation = fetchInformation()
         val informationArrayList = arrayListOf<InformationDataModel>()

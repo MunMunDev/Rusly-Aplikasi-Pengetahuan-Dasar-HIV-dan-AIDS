@@ -9,11 +9,14 @@ import android.view.View
 import android.view.View.OnLongClickListener
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.PopupMenu
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.rusly_aplikasipengetahuandasarhivdanaids.R
+import com.example.rusly_aplikasipengetahuandasarhivdanaids.data.database.retrofit.ApiService
 import com.example.rusly_aplikasipengetahuandasarhivdanaids.data.model.MessageModel
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -26,6 +29,8 @@ class MessageKonsultasiAdapter(val context: Context, val messageList: List<Messa
     val TAG = "MessageKonsultasiAdapterTag"
     val ITEM_SENT = 1
     val ITEM_RECEIVED = 2
+    val ITEM_SENT_IMAGE = 3
+    val ITEM_RECEIVED_IMAGE = 4
 
     var checkBoxMessage = false
     var nomorCheck = 0
@@ -36,9 +41,15 @@ class MessageKonsultasiAdapter(val context: Context, val messageList: List<Messa
             val view = LayoutInflater.from(context).inflate(R.layout.list_sent, parent, false)
             return SentViewHolder(view)
         }
-        else{
+        else if(viewType == 2){
             val view = LayoutInflater.from(context).inflate(R.layout.list_received, parent, false)
             return ReceivedViewHolder(view)
+        }else if(viewType == 3){
+            val view = LayoutInflater.from(context).inflate(R.layout.list_sent_gambar, parent, false)
+            return SentViewHolderGambar(view)
+        } else{
+            val view = LayoutInflater.from(context).inflate(R.layout.list_received_gambar, parent, false)
+            return ReceivedViewHolderGambar(view)
         }
     }
 
@@ -47,45 +58,21 @@ class MessageKonsultasiAdapter(val context: Context, val messageList: List<Messa
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, @SuppressLint("RecyclerView") position: Int) {
+        var list = messageList[position]
+
         if(holder.javaClass == SentViewHolder::class.java){
             //Tampilkan Chat Pengirim
             val viewHolder = holder as SentViewHolder
-            viewHolder.sentMessage.text = messageList[position].message
-            Log.d("MessageKonsultasi", "MessageKonsultasiAdapter 1: idSent: ${messageList[position].idSent} dan idReceived: ${messageList[position].idReceived}")
-            var idMessage = messageList[position].idMessage
-
+            viewHolder.sentMessage.text = list.message
 
             viewHolder.sentMessage.setOnLongClickListener(object: OnLongClickListener{
                 override fun onLongClick(v: View?): Boolean {
-
-//                    Log.d(TAG, "onLongClick: Pembatas")
-//
-//                    var cek = false
-//                    var no = 0
-//                    for (value in valueDataIdMessage){
-//                        if(value==idMessage){
-//                            valueDataIdMessage.remove(value)
-//                            valueDataIdMessage.removeAt(no)
-//                            cek = true
-//                        }
-//                         no++
-//                    }
-//                    Log.d(TAG, "onLongClick: oho")
-//                    if(!cek){
-//                        valueDataIdMessage.add(idMessage.toString())
-//                    }
-//
-//                    for (value in valueDataIdMessage){
-//                        Log.d(TAG, "onLongClick: data: ${value}")
-//                    }
-//                    return true
-
                     var popupMenu = PopupMenu(context, v)
                     popupMenu.inflate(R.menu.popup_menu_hapus)
                     popupMenu.setOnMenuItemClickListener { v->
                         when(v.itemId){
                             R.id.hapus->
-                                hapusPesan(messageList[position])
+                                hapusPesan(list)
                         }
 
                         return@setOnMenuItemClickListener true
@@ -103,19 +90,49 @@ class MessageKonsultasiAdapter(val context: Context, val messageList: List<Messa
                 }
             }
         }
-        else{
+        else if(holder.javaClass == ReceivedViewHolder::class.java){
             //Tampilkan Chat Diterima
             val viewHolder = holder as ReceivedViewHolder
-            viewHolder.receivedMessage.text = messageList[position].message
-            Log.d("MessageKonsultasi2", "MessageKonsultasiAdapter 2: idSent: ${messageList[position].idSent} dan idReceived: ${messageList[position].idReceived}")
+            viewHolder.receivedMessage.text = list.message
+        } else if(holder.javaClass == SentViewHolderGambar::class.java){
+            //Tampilkan Gambar Dikirim
+            val viewHolder = holder as SentViewHolderGambar
+            Glide.with(holder.itemView)
+                .load("https://aplikasi-tugas.my.id/rusly/gambar/${list.gambar}") // URL Gambar
+                .error(R.drawable.gambar_error_image)
+                .into(viewHolder.sentMessageGambar) // imageView mana yang akan diterapkan
 
+            viewHolder.sentMessageGambar.setOnLongClickListener(object: OnLongClickListener{
+                override fun onLongClick(v: View?): Boolean {
+                    var popupMenu = PopupMenu(context, v)
+                    popupMenu.inflate(R.menu.popup_menu_hapus)
+                    popupMenu.setOnMenuItemClickListener { v->
+                        when(v.itemId){
+                            R.id.hapus->
+                                hapusPesan(list)
+                        }
+
+                        return@setOnMenuItemClickListener true
+                    }
+                    popupMenu.show()
+
+                    return true
+                }
+
+            })
+        } else if(holder.javaClass == ReceivedViewHolderGambar::class.java){
+            //Tampilkan Gambar Diterima
+            val viewHolder = holder as ReceivedViewHolderGambar
+            Glide.with(holder.itemView)
+                .load("https://aplikasi-tugas.my.id/rusly/gambar/${list.gambar}") // URL Gambar
+                .error(R.drawable.gambar_error_image)
+                .into(viewHolder.receivedMessageGambar) // imageView mana yang akan diterapkan
         }
-
-//        Log.d("MessageKonsultasiAdapter", "onBindViewHolder: idSent: ${messageList[position].idSent} dan idReceived: ${messageList[position].idReceived}")
     }
 
     fun hapusPesan(messageList: MessageModel){
         var view = View.inflate(context, R.layout.alert_dialog_hapus, null)
+        var tvTitle = view.findViewById<TextView>(R.id.tvTitle)
         var btnHapus = view.findViewById<Button>(R.id.btnHapus)
         var btnBatalHapus = view.findViewById<Button>(R.id.btnBatalHapus)
 
@@ -152,18 +169,37 @@ class MessageKonsultasiAdapter(val context: Context, val messageList: List<Messa
         val currentMessage = messageList[position]
 
         if(currentMessage.idSent == id){
-            return ITEM_SENT
+//            if(currentMessage.message.toString().trim().isNotEmpty()){
+//                return ITEM_SENT
+//            } else{
+//                return ITEM_SENT_IMAGE
+//            }
+            if(currentMessage.message.toString().trim().isEmpty()){
+                return ITEM_SENT_IMAGE
+            } else{
+                return ITEM_SENT
+            }
         }
         else{
-            return ITEM_RECEIVED
+            if(currentMessage.message.toString().trim().isEmpty()){
+                return ITEM_RECEIVED_IMAGE
+            } else{
+                return ITEM_RECEIVED
+            }
         }
     }
 
     class SentViewHolder(v: View): RecyclerView.ViewHolder(v){
         val sentMessage = v.findViewById<TextView>(R.id.tvMessageSent)
     }
+    class SentViewHolderGambar(v: View): RecyclerView.ViewHolder(v){
+        val sentMessageGambar = v.findViewById<ImageView>(R.id.ivMessageSentImage)
+    }
     class ReceivedViewHolder(v: View): RecyclerView.ViewHolder(v){
         val receivedMessage = v.findViewById<TextView>(R.id.tvMessageReceived)
+    }
+    class ReceivedViewHolderGambar(v: View): RecyclerView.ViewHolder(v){
+        val receivedMessageGambar = v.findViewById<ImageView>(R.id.ivMessageReceivedImage)
     }
 
 }

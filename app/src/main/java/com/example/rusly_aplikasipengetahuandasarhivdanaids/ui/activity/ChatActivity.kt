@@ -16,13 +16,10 @@ import android.view.View
 import android.view.Window
 import android.view.WindowManager
 import android.widget.Toast
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.rusly_aplikasipengetahuandasarhivdanaids.adapter.ListChatOtomatisAdapter
 import com.example.rusly_aplikasipengetahuandasarhivdanaids.adapter.ListPertanyaanOtomatisAdapter
 import com.example.rusly_aplikasipengetahuandasarhivdanaids.adapter.MessageKonsultasiAdapter
@@ -33,13 +30,13 @@ import com.example.rusly_aplikasipengetahuandasarhivdanaids.data.model.MessageMo
 import com.example.rusly_aplikasipengetahuandasarhivdanaids.data.model.NotificationModel
 import com.example.rusly_aplikasipengetahuandasarhivdanaids.data.model.PertanyaanOtomatisModel
 import com.example.rusly_aplikasipengetahuandasarhivdanaids.data.model.PushNotificationModel
+import com.example.rusly_aplikasipengetahuandasarhivdanaids.data.model.ResponseModel
 import com.example.rusly_aplikasipengetahuandasarhivdanaids.databinding.ActivityChatBinding
 import com.example.rusly_aplikasipengetahuandasarhivdanaids.databinding.AlertDialogKeteranganBinding
 import com.example.rusly_aplikasipengetahuandasarhivdanaids.utils.SharedPreferencesLogin
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -72,6 +69,8 @@ class ChatActivity : Activity() {
     var token: String? = null
     val TAG = "ChatActivity";
 
+    var image = ""
+
     val STORAGE_PERMISSION_CODE = 10
     val IMAGE_CODE = 11
 
@@ -91,7 +90,21 @@ class ChatActivity : Activity() {
         setButton()
         hurufAcak()
 
-        fetchChatPertanyaanOtomatis()
+        setCheckSebagai()
+    }
+
+    private fun setCheckSebagai() {
+        binding.apply {
+            if(sharedPref.getSebagai() == "dokter"){
+                llMessage.visibility = View.VISIBLE
+                rvListKonsultasiChatDokter.visibility = View.VISIBLE
+                llDontSendMessage.visibility = View.GONE
+                llChatOtomatis.visibility = View.GONE
+                svPertanyaanOtomatis.visibility = View.GONE
+
+                etMessage.requestFocus()
+            }
+        }
     }
 
     private fun fetchDataSebelumnya() {
@@ -129,34 +142,54 @@ class ChatActivity : Activity() {
                 etMessage.requestFocus()
             }
 
+            btnUploadCamera.setOnClickListener {
+                if(checkPermission()){
+                    pickImageFile()
+                } else{
+                    requestPermission()
+                }
+            }
 
             btnSendMessage.setOnClickListener {
                 if(etMessage.text.trim().isNotEmpty()){
                     // Kirim data
-                    database.addListenerForSingleValueEvent(object: ValueEventListener{
-                        override fun onDataChange(snapshot: DataSnapshot) {
-                            database.child("$senderRoom").child("idMessage").setValue(senderRoom)
-                            database.child("$senderRoom").child("message").setValue(etMessage.text.toString().trim())
-                            database.child("$senderRoom").child("idSent").setValue(idSent)
-                            database.child("$senderRoom").child("idReceived").setValue(idReceived)
-                            database.child("$senderRoom").child("tanggal").setValue(tanggalSekarangZonaMakassar())
-                            database.child("$senderRoom").child("waktu").setValue(waktuSekarangZonaMakassar())
-                            database.child("$senderRoom").child("ket").setValue("belum dibaca")
-
-                            postMessage(sharedPref.getNama(), etMessage.text.toString(), token.toString())
-
-                            etMessage.text = null
-                            hurufAcak()
-                        }
-
-                        override fun onCancelled(error: DatabaseError) {
-                            Toast.makeText(this@ChatActivity, "Gagal", Toast.LENGTH_SHORT).show()
-                        }
-
-                    })
+                    postMessageToDatabase(senderRoom!!, etMessage.text.toString().trim(), "")
                 }
             }
         }
+    }
+
+    private fun postMessageToDatabase(
+        id: String,
+        message: String,
+        gambar: String
+    ){
+        database.addListenerForSingleValueEvent(object: ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                database.child("$id").child("idMessage").setValue(id)
+                database.child("$id").child("message").setValue(message)
+                database.child("$id").child("gambar").setValue(gambar)
+                database.child("$id").child("idSent").setValue(idSent)
+                database.child("$id").child("idReceived").setValue(idReceived)
+                database.child("$id").child("tanggal").setValue(tanggalSekarangZonaMakassar())
+                database.child("$id").child("waktu").setValue(waktuSekarangZonaMakassar())
+                database.child("$id").child("ket").setValue("belum dibaca")
+
+                if(gambar.trim().isEmpty()){
+                    postMessage(sharedPref.getNama(), message, token.toString())
+                    binding.etMessage.text = null
+                } else{
+                    postMessage(sharedPref.getNama(), "Ada Gambar Diterima", token.toString())
+                }
+
+                hurufAcak()
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Toast.makeText(this@ChatActivity, "Gagal", Toast.LENGTH_SHORT).show()
+            }
+
+        })
     }
 
     private fun setCheckJamOperasional() {
@@ -186,6 +219,7 @@ class ChatActivity : Activity() {
                 for(value in snapshot.children){
                     var valueIdMessage: String? = ""
                     var valueMessage: String? = ""
+                    var valueGambar: String? = ""
                     var valueIdSent: String? = ""
                     var valueIdReceived: String? = ""
                     var valueTanggal: String? = ""
@@ -195,6 +229,7 @@ class ChatActivity : Activity() {
                     for(valueKedua in value.children){
                         val childIdMessage = value.child("idMessage").value.toString()
                         val childMessage = value.child("message").value.toString()
+                        val childGambar = value.child("gambar").value.toString()
                         val childIdSent = value.child("idSent").value.toString()
                         val childIdReceived = value.child("idReceived").value.toString()
                         val childTanggal = value.child("tanggal").value.toString()
@@ -203,6 +238,7 @@ class ChatActivity : Activity() {
                         if(childIdSent == idSent && childIdReceived == idReceived){
                             valueIdMessage = childIdMessage
                             valueMessage = childMessage
+                            valueGambar = childGambar
                             valueIdSent = childIdSent
                             valueIdReceived = childIdReceived
                             valueTanggal = childTanggal
@@ -212,6 +248,7 @@ class ChatActivity : Activity() {
                         else if(childIdSent == idReceived && childIdReceived == idSent){
                             valueIdMessage = childIdMessage
                             valueMessage = childMessage
+                            valueGambar = childGambar
                             valueIdSent = childIdSent
                             valueIdReceived = childIdReceived
                             valueTanggal = childTanggal
@@ -220,11 +257,12 @@ class ChatActivity : Activity() {
                         }
 
                     }
-                    if(valueMessage!!.isNotEmpty() && valueIdSent!!.isNotEmpty() && valueIdReceived!!.isNotEmpty()){
+                    if(valueIdSent!!.isNotEmpty() && valueIdReceived!!.isNotEmpty()){
                         messageArrayList.add(
                             MessageModel(
                                 valueIdMessage.toString(),
                                 valueMessage.toString(),
+                                valueGambar.toString(),
                                 valueIdSent.toString(),
                                 valueIdReceived.toString(),
                                 valueTanggal.toString(),
@@ -514,5 +552,126 @@ class ChatActivity : Activity() {
             })
     }
 
+    // permission add image
+    private fun requestPermission(){
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R){
+            if (Environment.isExternalStorageManager()) {
+                startActivity(Intent(this, ChatActivity::class.java))
+            } else { //request for the permission
+                val intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
+                val uri = Uri.fromParts("package", packageName, null)
+                intent.data = uri
+                startActivity(intent)
+            }
+        } else{
+            ActivityCompat.requestPermissions(this,
+                arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE),
+                STORAGE_PERMISSION_CODE
+            )
+        }
+    }
+
+    private fun pickImageFile() {
+        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+            type = "image/*"
+        }
+
+        startActivityForResult(intent, IMAGE_CODE)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == IMAGE_CODE && resultCode == Activity.RESULT_OK && data != null) {
+            // Mendapatkan URI file PDF yang dipilih
+            val fileUri = data.data!!
+
+            val nameImage = getNameFile(fileUri)
+
+            image = nameImage
+
+            hurufAcak()
+
+            val arrayNamaGambar = nameImage.split(".")
+            val sizeArrayGambar = arrayNamaGambar.size
+            val ekstensi = arrayNamaGambar[sizeArrayGambar-1].trim()
+
+            var post = convertStringToMultipartBody("post_gambar_chat")
+            var fileImage = uploadImageToStorage(fileUri, nameImage, "gambar")
+
+            postImageInBrowser(post, fileImage!!, senderRoom!!, ekstensi)
+        }
+    }
+
+    private fun postImageInBrowser(
+        post: RequestBody,
+        fileImage: MultipartBody.Part,
+        nama: String,
+        ekstensi: String
+    ) {
+        val namaImage = convertStringToMultipartBody("$nama.$ekstensi")
+        ApiService.getRetrofitMySql().postGambarChat(post, fileImage, namaImage)
+            .enqueue(object : Callback<ArrayList<ResponseModel>>{
+                override fun onResponse(
+                    call: Call<ArrayList<ResponseModel>>,
+                    response: Response<ArrayList<ResponseModel>>
+                ) {
+                    Toast.makeText(this@ChatActivity, "Berhasil Upload", Toast.LENGTH_SHORT).show()
+                    Log.d(TAG, "imageiii: $nama")
+                    postMessageToDatabase(nama, "", "$nama.$ekstensi")
+                }
+
+                override fun onFailure(call: Call<ArrayList<ResponseModel>>, t: Throwable) {
+                    Toast.makeText(this@ChatActivity, "Gagal Upload", Toast.LENGTH_SHORT).show()
+                }
+            })
+    }
+
+    private fun getNameFile(uri: Uri): String {
+        val cursor = contentResolver.query(uri, null, null, null, null)
+        val nameIndex = cursor?.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+        cursor?.moveToFirst()
+        val name = cursor?.getString(nameIndex!!)
+        cursor?.close()
+        return name!!
+    }
+
+    @SuppressLint("Recycle")
+    private fun uploadImageToStorage(imageUri: Uri?, fileName: String, nameAPI:String): MultipartBody.Part? {
+        var pdfPart : MultipartBody.Part? = null
+        imageUri?.let {
+            val file = contentResolver.openInputStream(imageUri)?.readBytes()
+
+            if (file != null) {
+                pdfPart = convertFileToMultipartBody(file, fileName, nameAPI)
+            }
+        }
+        return pdfPart
+    }
+
+    private fun convertFileToMultipartBody(file: ByteArray, fileName: String, nameAPI:String): MultipartBody.Part?{
+//        val requestFile = file.toRequestBody("application/pdf".toMediaTypeOrNull())
+        val requestFile = file.toRequestBody("application/image".toMediaTypeOrNull())
+        val filePart = MultipartBody.Part.createFormData(nameAPI, fileName, requestFile)
+
+        return filePart
+    }
+
+    private fun convertStringToMultipartBody(data: String): RequestBody {
+        return RequestBody.create("multipart/form-data".toMediaTypeOrNull(), data)
+    }
+
+    private fun checkPermission(): Boolean{
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R){
+            //Android is 11(R) or above
+            Environment.isExternalStorageManager()
+        }
+        else{
+            //Android is below 11(R)
+            val write = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            val read = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+            write == PackageManager.PERMISSION_GRANTED && read == PackageManager.PERMISSION_GRANTED
+        }
+    }
 
 }

@@ -9,6 +9,9 @@ class MessageModel {
     @SerializedName("message")
     var message: String? = null
 
+    @SerializedName("gambar")
+    var gambar: String? = null
+
     @SerializedName("idSent")
     var idSent: String? = null
 
@@ -36,9 +39,10 @@ class MessageModel {
 //        this.ket = ket
 //    }
 
-    constructor(idMessage:String, message:String, idSent:String, idReceived:String, tanggal:String, waktu:String, ket:String){
+    constructor(idMessage:String, message:String, gambar:String, idSent:String, idReceived:String, tanggal:String, waktu:String, ket:String){
         this.idMessage = idMessage
         this.message = message
+        this.gambar = gambar
         this.idSent = idSent
         this.idReceived = idReceived
         this.tanggal = tanggal

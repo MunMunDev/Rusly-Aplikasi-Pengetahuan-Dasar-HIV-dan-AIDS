@@ -13,6 +13,7 @@ import com.example.rusly_aplikasipengetahuandasarhivdanaids.R
 import com.example.rusly_aplikasipengetahuandasarhivdanaids.ui.activity.*
 import com.example.rusly_aplikasipengetahuandasarhivdanaids.ui.activity.admin.AdminInformasiHivAidsActivity
 import com.example.rusly_aplikasipengetahuandasarhivdanaids.ui.activity.admin.AdminMainActivity
+import com.example.rusly_aplikasipengetahuandasarhivdanaids.ui.activity.admin.AdminPertanyaanOtomatisActivity
 import com.example.rusly_aplikasipengetahuandasarhivdanaids.ui.activity.admin.AdminSemuaDokterActivity
 import com.example.rusly_aplikasipengetahuandasarhivdanaids.ui.activity.admin.AdminSemuaUserActivity
 import com.example.rusly_aplikasipengetahuandasarhivdanaids.ui.activity.user.MainActivity
@@ -109,6 +110,11 @@ class KontrolNavigationDrawer(var context: Context) {
                     }
                     R.id.adminNavDrawerInformasi ->{
                         val intent = Intent(Intent(context, AdminInformasiHivAidsActivity::class.java))
+                        context.startActivity(intent)
+                        activity.finish()
+                    }
+                    R.id.adminNavDrawerPertanyaanOtomatis ->{
+                        val intent = Intent(Intent(context, AdminPertanyaanOtomatisActivity::class.java))
                         context.startActivity(intent)
                         activity.finish()
                     }
