@@ -3,7 +3,7 @@
     android:shape="oval">
     <solid android:color="@color/merah_btn_registrasi"/>
     <stroke android:width="1dp"
-        android:color="@color/abuabau_muda"/>
+        android:color="@color/abuabu_muda"/>
     <padding android:top="6dp"
         android:bottom="6dp"
         android:left="8dp"

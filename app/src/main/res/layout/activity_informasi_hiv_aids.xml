@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     tools:context=".ui.activity.InformasiHivAidsActivity"
     android:id="@+id/drawerLayoutMain"
-    android:backgroundTint="@color/abuabau_muda_sekali">
+    android:backgroundTint="@color/abuabu_muda_sekali">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -51,8 +51,8 @@
                 android:textColor="@color/white"
                 android:textStyle="bold"/>
 
-            <LinearLayout
-                android:id="@+id/lyHivAids"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvInformation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@+id/bgHeader"
@@ -60,547 +60,558 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
                 android:paddingBottom="20dp"
-                android:orientation="vertical">
+                tools:listitem="@layout/list_informasi"/>
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/clDefinisiHivAids"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingStart="14dp"
-                    android:paddingTop="14dp"
-                    android:paddingBottom="10dp"
-                    android:background="@drawable/bg_card">
+<!--            <LinearLayout-->
+<!--                android:id="@+id/lyHivAids"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/bgHeader"-->
+<!--                android:layout_marginTop="16dp"-->
+<!--                android:layout_marginStart="20dp"-->
+<!--                android:layout_marginEnd="20dp"-->
+<!--                android:paddingBottom="20dp"-->
+<!--                android:orientation="vertical">-->
 
-                    <TextView
-                        android:id="@+id/titleDefinisiHivAids"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/arrowDefinisiHivAids"
-                        android:layout_marginEnd="8dp"
-                        android:text="@string/definisi_hiv_aids"
-                        android:textColor="@color/black"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        app:layout_constraintTop_toTopOf="parent" />
+<!--                <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--                    android:id="@+id/clDefinisiHivAids"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:paddingStart="14dp"-->
+<!--                    android:paddingTop="14dp"-->
+<!--                    android:paddingBottom="10dp"-->
+<!--                    android:background="@drawable/bg_card">-->
 
-                    <ImageView
-                        android:id="@+id/arrowDefinisiHivAids"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:background="@drawable/baseline_arrow_drop_down_24"
-                        app:layout_constraintBottom_toBottomOf="@+id/titleDefinisiHivAids"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="@+id/titleDefinisiHivAids" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
+<!--                    <TextView-->
+<!--                        android:id="@+id/titleDefinisiHivAids"-->
+<!--                        android:layout_width="0dp"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        app:layout_constraintStart_toStartOf="parent"-->
+<!--                        app:layout_constraintEnd_toStartOf="@+id/arrowDefinisiHivAids"-->
+<!--                        android:layout_marginEnd="8dp"-->
+<!--                        android:text="@string/definisi_hiv_aids"-->
+<!--                        android:textColor="@color/black"-->
+<!--                        android:textSize="16sp"-->
+<!--                        android:textStyle="bold"-->
+<!--                        app:layout_constraintTop_toTopOf="parent" />-->
 
-                <TextView
-                    android:id="@+id/isiDefinisiHivAids"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="-5dp"
-                    android:background="@drawable/bg_teks_penjelasan"
-                    android:paddingStart="12dp"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="8dp"
-                    android:text="@string/teks_full_definisi_hiv_aids"
-                    android:textColor="@color/black"
-                    android:textSize="14sp"
-                    android:textStyle="normal"
-                    android:visibility="gone" />
+<!--                    <ImageView-->
+<!--                        android:id="@+id/arrowDefinisiHivAids"-->
+<!--                        android:layout_width="40dp"-->
+<!--                        android:layout_height="40dp"-->
+<!--                        android:background="@drawable/baseline_arrow_drop_down_24"-->
+<!--                        app:layout_constraintBottom_toBottomOf="@+id/titleDefinisiHivAids"-->
+<!--                        app:layout_constraintEnd_toEndOf="parent"-->
+<!--                        app:layout_constraintTop_toTopOf="@+id/titleDefinisiHivAids" />-->
+<!--                </androidx.constraintlayout.widget.ConstraintLayout>-->
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/clSejarahHivAids"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:paddingStart="14dp"
-                    android:paddingTop="14dp"
-                    android:paddingBottom="10dp"
-                    android:background="@drawable/bg_card">
+<!--                <TextView-->
+<!--                    android:id="@+id/isiDefinisiHivAids"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginTop="-5dp"-->
+<!--                    android:background="@drawable/bg_teks_penjelasan"-->
+<!--                    android:paddingStart="12dp"-->
+<!--                    android:paddingTop="10dp"-->
+<!--                    android:paddingBottom="8dp"-->
+<!--                    android:text="@string/teks_full_definisi_hiv_aids"-->
+<!--                    android:textColor="@color/black"-->
+<!--                    android:textSize="14sp"-->
+<!--                    android:textStyle="normal"-->
+<!--                    android:visibility="gone" />-->
 
-                    <TextView
-                        android:id="@+id/titleSejarahHivAids"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/arrowSejarahHivAids"
-                        android:layout_marginEnd="8dp"
-                        android:text="@string/sejarah_hiv_aids"
-                        android:textColor="@color/black"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        app:layout_constraintTop_toTopOf="parent" />
+<!--                <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--                    android:id="@+id/clSejarahHivAids"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginTop="12dp"-->
+<!--                    android:paddingStart="14dp"-->
+<!--                    android:paddingTop="14dp"-->
+<!--                    android:paddingBottom="10dp"-->
+<!--                    android:background="@drawable/bg_card">-->
 
-                    <ImageView
-                        android:id="@+id/arrowSejarahHivAids"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:background="@drawable/baseline_arrow_drop_down_24"
-                        app:layout_constraintBottom_toBottomOf="@+id/titleSejarahHivAids"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="@+id/titleSejarahHivAids" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
+<!--                    <TextView-->
+<!--                        android:id="@+id/titleSejarahHivAids"-->
+<!--                        android:layout_width="0dp"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        app:layout_constraintStart_toStartOf="parent"-->
+<!--                        app:layout_constraintEnd_toStartOf="@+id/arrowSejarahHivAids"-->
+<!--                        android:layout_marginEnd="8dp"-->
+<!--                        android:text="@string/sejarah_hiv_aids"-->
+<!--                        android:textColor="@color/black"-->
+<!--                        android:textSize="16sp"-->
+<!--                        android:textStyle="bold"-->
+<!--                        app:layout_constraintTop_toTopOf="parent" />-->
 
-                <TextView
-                    android:id="@+id/isiSejarahHivAids"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="-5dp"
-                    android:background="@drawable/bg_teks_penjelasan"
-                    android:paddingStart="12dp"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="8dp"
-                    android:text="@string/teks_full_sejarah_hiv_aids"
-                    android:textColor="@color/black"
-                    android:textSize="14sp"
-                    android:textStyle="normal"
-                    android:visibility="gone" />
+<!--                    <ImageView-->
+<!--                        android:id="@+id/arrowSejarahHivAids"-->
+<!--                        android:layout_width="40dp"-->
+<!--                        android:layout_height="40dp"-->
+<!--                        android:background="@drawable/baseline_arrow_drop_down_24"-->
+<!--                        app:layout_constraintBottom_toBottomOf="@+id/titleSejarahHivAids"-->
+<!--                        app:layout_constraintEnd_toEndOf="parent"-->
+<!--                        app:layout_constraintTop_toTopOf="@+id/titleSejarahHivAids" />-->
+<!--                </androidx.constraintlayout.widget.ConstraintLayout>-->
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/clGejalaHivAids"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:paddingStart="14dp"
-                    android:paddingTop="14dp"
-                    android:paddingBottom="10dp"
-                    android:background="@drawable/bg_card">
+<!--                <TextView-->
+<!--                    android:id="@+id/isiSejarahHivAids"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginTop="-5dp"-->
+<!--                    android:background="@drawable/bg_teks_penjelasan"-->
+<!--                    android:paddingStart="12dp"-->
+<!--                    android:paddingTop="10dp"-->
+<!--                    android:paddingBottom="8dp"-->
+<!--                    android:text="@string/teks_full_sejarah_hiv_aids"-->
+<!--                    android:textColor="@color/black"-->
+<!--                    android:textSize="14sp"-->
+<!--                    android:textStyle="normal"-->
+<!--                    android:visibility="gone" />-->
 
-                    <TextView
-                        android:id="@+id/titleGejalaHivAids"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/arrowGejalaHivAids"
-                        android:layout_marginEnd="8dp"
-                        android:text="@string/gejala_hiv_aids"
-                        android:textColor="@color/black"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        app:layout_constraintTop_toTopOf="parent" />
+<!--                <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--                    android:id="@+id/clGejalaHivAids"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginTop="10dp"-->
+<!--                    android:paddingStart="14dp"-->
+<!--                    android:paddingTop="14dp"-->
+<!--                    android:paddingBottom="10dp"-->
+<!--                    android:background="@drawable/bg_card">-->
 
-                    <ImageView
-                        android:id="@+id/arrowGejalaHivAids"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:background="@drawable/baseline_arrow_drop_down_24"
-                        app:layout_constraintBottom_toBottomOf="@+id/titleGejalaHivAids"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="@+id/titleGejalaHivAids" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
+<!--                    <TextView-->
+<!--                        android:id="@+id/titleGejalaHivAids"-->
+<!--                        android:layout_width="0dp"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        app:layout_constraintStart_toStartOf="parent"-->
+<!--                        app:layout_constraintEnd_toStartOf="@+id/arrowGejalaHivAids"-->
+<!--                        android:layout_marginEnd="8dp"-->
+<!--                        android:text="@string/gejala_hiv_aids"-->
+<!--                        android:textColor="@color/black"-->
+<!--                        android:textSize="16sp"-->
+<!--                        android:textStyle="bold"-->
+<!--                        app:layout_constraintTop_toTopOf="parent" />-->
 
-                <TextView
-                    android:id="@+id/isiGejalaHivAids"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="-5dp"
-                    android:background="@drawable/bg_teks_penjelasan"
-                    android:paddingStart="12dp"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="8dp"
-                    android:text="@string/teks_full_gejala_hiv_aids"
-                    android:textColor="@color/black"
-                    android:textSize="14sp"
-                    android:textStyle="normal"
-                    android:visibility="gone" />
+<!--                    <ImageView-->
+<!--                        android:id="@+id/arrowGejalaHivAids"-->
+<!--                        android:layout_width="40dp"-->
+<!--                        android:layout_height="40dp"-->
+<!--                        android:background="@drawable/baseline_arrow_drop_down_24"-->
+<!--                        app:layout_constraintBottom_toBottomOf="@+id/titleGejalaHivAids"-->
+<!--                        app:layout_constraintEnd_toEndOf="parent"-->
+<!--                        app:layout_constraintTop_toTopOf="@+id/titleGejalaHivAids" />-->
+<!--                </androidx.constraintlayout.widget.ConstraintLayout>-->
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/clPenularanHivAids"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:paddingStart="14dp"
-                    android:paddingTop="14dp"
-                    android:paddingBottom="10dp"
-                    android:background="@drawable/bg_card">
+<!--                <TextView-->
+<!--                    android:id="@+id/isiGejalaHivAids"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginTop="-5dp"-->
+<!--                    android:background="@drawable/bg_teks_penjelasan"-->
+<!--                    android:paddingStart="12dp"-->
+<!--                    android:paddingTop="10dp"-->
+<!--                    android:paddingBottom="8dp"-->
+<!--                    android:text="@string/teks_full_gejala_hiv_aids"-->
+<!--                    android:textColor="@color/black"-->
+<!--                    android:textSize="14sp"-->
+<!--                    android:textStyle="normal"-->
+<!--                    android:visibility="gone" />-->
 
-                    <TextView
-                        android:id="@+id/titlePenularanHivAids"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/arrowPenularanHivAids"
-                        android:layout_marginEnd="8dp"
-                        android:text="@string/penularan_hiv_aids"
-                        android:textColor="@color/black"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        app:layout_constraintTop_toTopOf="parent" />
+<!--                <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--                    android:id="@+id/clPenularanHivAids"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginTop="12dp"-->
+<!--                    android:paddingStart="14dp"-->
+<!--                    android:paddingTop="14dp"-->
+<!--                    android:paddingBottom="10dp"-->
+<!--                    android:background="@drawable/bg_card">-->
 
-                    <ImageView
-                        android:id="@+id/arrowPenularanHivAids"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:background="@drawable/baseline_arrow_drop_down_24"
-                        app:layout_constraintBottom_toBottomOf="@+id/titlePenularanHivAids"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="@+id/titlePenularanHivAids" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
+<!--                    <TextView-->
+<!--                        android:id="@+id/titlePenularanHivAids"-->
+<!--                        android:layout_width="0dp"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        app:layout_constraintStart_toStartOf="parent"-->
+<!--                        app:layout_constraintEnd_toStartOf="@+id/arrowPenularanHivAids"-->
+<!--                        android:layout_marginEnd="8dp"-->
+<!--                        android:text="@string/penularan_hiv_aids"-->
+<!--                        android:textColor="@color/black"-->
+<!--                        android:textSize="16sp"-->
+<!--                        android:textStyle="bold"-->
+<!--                        app:layout_constraintTop_toTopOf="parent" />-->
 
-                <TextView
-                    android:id="@+id/isiPenularanHivAids"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="-5dp"
-                    android:background="@drawable/bg_teks_penjelasan"
-                    android:paddingStart="12dp"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="8dp"
-                    android:text="@string/teks_full_definisi_hiv_aids"
-                    android:textColor="@color/black"
-                    android:textSize="14sp"
-                    android:textStyle="normal"
-                    android:visibility="gone" />
+<!--                    <ImageView-->
+<!--                        android:id="@+id/arrowPenularanHivAids"-->
+<!--                        android:layout_width="40dp"-->
+<!--                        android:layout_height="40dp"-->
+<!--                        android:background="@drawable/baseline_arrow_drop_down_24"-->
+<!--                        app:layout_constraintBottom_toBottomOf="@+id/titlePenularanHivAids"-->
+<!--                        app:layout_constraintEnd_toEndOf="parent"-->
+<!--                        app:layout_constraintTop_toTopOf="@+id/titlePenularanHivAids" />-->
+<!--                </androidx.constraintlayout.widget.ConstraintLayout>-->
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/clMetodeTesHivAids"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:paddingStart="14dp"
-                    android:paddingTop="14dp"
-                    android:paddingBottom="10dp"
-                    android:background="@drawable/bg_card">
+<!--                <TextView-->
+<!--                    android:id="@+id/isiPenularanHivAids"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginTop="-5dp"-->
+<!--                    android:background="@drawable/bg_teks_penjelasan"-->
+<!--                    android:paddingStart="12dp"-->
+<!--                    android:paddingTop="10dp"-->
+<!--                    android:paddingBottom="8dp"-->
+<!--                    android:text="@string/teks_full_definisi_hiv_aids"-->
+<!--                    android:textColor="@color/black"-->
+<!--                    android:textSize="14sp"-->
+<!--                    android:textStyle="normal"-->
+<!--                    android:visibility="gone" />-->
 
-                    <TextView
-                        android:id="@+id/titleMetodeHivAids"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/arrowMetodeTesHivAids"
-                        android:layout_marginEnd="8dp"
-                        android:text="@string/metode_tes_hiv"
-                        android:textColor="@color/black"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        app:layout_constraintTop_toTopOf="parent" />
+<!--                <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--                    android:id="@+id/clMetodeTesHivAids"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginTop="12dp"-->
+<!--                    android:paddingStart="14dp"-->
+<!--                    android:paddingTop="14dp"-->
+<!--                    android:paddingBottom="10dp"-->
+<!--                    android:background="@drawable/bg_card">-->
 
-                    <ImageView
-                        android:id="@+id/arrowMetodeTesHivAids"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:background="@drawable/baseline_arrow_drop_down_24"
-                        app:layout_constraintBottom_toBottomOf="@+id/titleMetodeHivAids"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="@+id/titleMetodeHivAids" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
+<!--                    <TextView-->
+<!--                        android:id="@+id/titleMetodeHivAids"-->
+<!--                        android:layout_width="0dp"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        app:layout_constraintStart_toStartOf="parent"-->
+<!--                        app:layout_constraintEnd_toStartOf="@+id/arrowMetodeTesHivAids"-->
+<!--                        android:layout_marginEnd="8dp"-->
+<!--                        android:text="@string/metode_tes_hiv"-->
+<!--                        android:textColor="@color/black"-->
+<!--                        android:textSize="16sp"-->
+<!--                        android:textStyle="bold"-->
+<!--                        app:layout_constraintTop_toTopOf="parent" />-->
 
-                <TextView
-                    android:id="@+id/isiMetodeTesHivAids"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="-5dp"
-                    android:background="@drawable/bg_teks_penjelasan"
-                    android:paddingStart="12dp"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="8dp"
-                    android:text="@string/teks_full_metode_tes_hiv"
-                    android:textColor="@color/black"
-                    android:textSize="14sp"
-                    android:textStyle="normal"
-                    android:visibility="gone" />
+<!--                    <ImageView-->
+<!--                        android:id="@+id/arrowMetodeTesHivAids"-->
+<!--                        android:layout_width="40dp"-->
+<!--                        android:layout_height="40dp"-->
+<!--                        android:background="@drawable/baseline_arrow_drop_down_24"-->
+<!--                        app:layout_constraintBottom_toBottomOf="@+id/titleMetodeHivAids"-->
+<!--                        app:layout_constraintEnd_toEndOf="parent"-->
+<!--                        app:layout_constraintTop_toTopOf="@+id/titleMetodeHivAids" />-->
+<!--                </androidx.constraintlayout.widget.ConstraintLayout>-->
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/clPencegahanHivAids"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:paddingStart="14dp"
-                    android:paddingTop="14dp"
-                    android:paddingBottom="10dp"
-                    android:background="@drawable/bg_card">
+<!--                <TextView-->
+<!--                    android:id="@+id/isiMetodeTesHivAids"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginTop="-5dp"-->
+<!--                    android:background="@drawable/bg_teks_penjelasan"-->
+<!--                    android:paddingStart="12dp"-->
+<!--                    android:paddingTop="10dp"-->
+<!--                    android:paddingBottom="8dp"-->
+<!--                    android:text="@string/teks_full_metode_tes_hiv"-->
+<!--                    android:textColor="@color/black"-->
+<!--                    android:textSize="14sp"-->
+<!--                    android:textStyle="normal"-->
+<!--                    android:visibility="gone" />-->
 
-                    <TextView
-                        android:id="@+id/titlePencegahanHivAids"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/arrowPencegahanHivAids"
-                        android:layout_marginEnd="8dp"
-                        android:text="@string/pencegahan_hiv_aids"
-                        android:textColor="@color/black"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        app:layout_constraintTop_toTopOf="parent" />
+<!--                <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--                    android:id="@+id/clPencegahanHivAids"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginTop="12dp"-->
+<!--                    android:paddingStart="14dp"-->
+<!--                    android:paddingTop="14dp"-->
+<!--                    android:paddingBottom="10dp"-->
+<!--                    android:background="@drawable/bg_card">-->
 
-                    <ImageView
-                        android:id="@+id/arrowPencegahanHivAids"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:background="@drawable/baseline_arrow_drop_down_24"
-                        app:layout_constraintBottom_toBottomOf="@+id/titlePencegahanHivAids"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="@+id/titlePencegahanHivAids" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
+<!--                    <TextView-->
+<!--                        android:id="@+id/titlePencegahanHivAids"-->
+<!--                        android:layout_width="0dp"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        app:layout_constraintStart_toStartOf="parent"-->
+<!--                        app:layout_constraintEnd_toStartOf="@+id/arrowPencegahanHivAids"-->
+<!--                        android:layout_marginEnd="8dp"-->
+<!--                        android:text="@string/pencegahan_hiv_aids"-->
+<!--                        android:textColor="@color/black"-->
+<!--                        android:textSize="16sp"-->
+<!--                        android:textStyle="bold"-->
+<!--                        app:layout_constraintTop_toTopOf="parent" />-->
 
-                <TextView
-                    android:id="@+id/isiPencegahanHivAids"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="-5dp"
-                    android:background="@drawable/bg_teks_penjelasan"
-                    android:paddingStart="12dp"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="8dp"
-                    android:text="@string/teks_full_pencegahan_hiv_aids"
-                    android:textColor="@color/black"
-                    android:textSize="14sp"
-                    android:textStyle="normal"
-                    android:visibility="gone" />
+<!--                    <ImageView-->
+<!--                        android:id="@+id/arrowPencegahanHivAids"-->
+<!--                        android:layout_width="40dp"-->
+<!--                        android:layout_height="40dp"-->
+<!--                        android:background="@drawable/baseline_arrow_drop_down_24"-->
+<!--                        app:layout_constraintBottom_toBottomOf="@+id/titlePencegahanHivAids"-->
+<!--                        app:layout_constraintEnd_toEndOf="parent"-->
+<!--                        app:layout_constraintTop_toTopOf="@+id/titlePencegahanHivAids" />-->
+<!--                </androidx.constraintlayout.widget.ConstraintLayout>-->
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/clPengobatanHivAids"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:paddingStart="14dp"
-                    android:paddingTop="14dp"
-                    android:paddingBottom="10dp"
-                    android:background="@drawable/bg_card">
+<!--                <TextView-->
+<!--                    android:id="@+id/isiPencegahanHivAids"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginTop="-5dp"-->
+<!--                    android:background="@drawable/bg_teks_penjelasan"-->
+<!--                    android:paddingStart="12dp"-->
+<!--                    android:paddingTop="10dp"-->
+<!--                    android:paddingBottom="8dp"-->
+<!--                    android:text="@string/teks_full_pencegahan_hiv_aids"-->
+<!--                    android:textColor="@color/black"-->
+<!--                    android:textSize="14sp"-->
+<!--                    android:textStyle="normal"-->
+<!--                    android:visibility="gone" />-->
 
-                    <TextView
-                        android:id="@+id/titlePengobatanHivAids"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/arrowPengobatanHivAids"
-                        android:layout_marginEnd="8dp"
-                        android:text="@string/pengobatan_hiv_aids"
-                        android:textColor="@color/black"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        app:layout_constraintTop_toTopOf="parent" />
+<!--                <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--                    android:id="@+id/clPengobatanHivAids"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginTop="12dp"-->
+<!--                    android:paddingStart="14dp"-->
+<!--                    android:paddingTop="14dp"-->
+<!--                    android:paddingBottom="10dp"-->
+<!--                    android:background="@drawable/bg_card">-->
 
-                    <ImageView
-                        android:id="@+id/arrowPengobatanHivAids"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:background="@drawable/baseline_arrow_drop_down_24"
-                        app:layout_constraintBottom_toBottomOf="@+id/titlePengobatanHivAids"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="@+id/titlePengobatanHivAids" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
+<!--                    <TextView-->
+<!--                        android:id="@+id/titlePengobatanHivAids"-->
+<!--                        android:layout_width="0dp"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        app:layout_constraintStart_toStartOf="parent"-->
+<!--                        app:layout_constraintEnd_toStartOf="@+id/arrowPengobatanHivAids"-->
+<!--                        android:layout_marginEnd="8dp"-->
+<!--                        android:text="@string/pengobatan_hiv_aids"-->
+<!--                        android:textColor="@color/black"-->
+<!--                        android:textSize="16sp"-->
+<!--                        android:textStyle="bold"-->
+<!--                        app:layout_constraintTop_toTopOf="parent" />-->
 
-                <TextView
-                    android:id="@+id/isiPengobatanHivAids"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="-5dp"
-                    android:background="@drawable/bg_teks_penjelasan"
-                    android:paddingStart="12dp"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="8dp"
-                    android:text="@string/teks_full_pengobatan_hiv_aids"
-                    android:textColor="@color/black"
-                    android:textSize="14sp"
-                    android:textStyle="normal"
-                    android:visibility="gone" />
+<!--                    <ImageView-->
+<!--                        android:id="@+id/arrowPengobatanHivAids"-->
+<!--                        android:layout_width="40dp"-->
+<!--                        android:layout_height="40dp"-->
+<!--                        android:background="@drawable/baseline_arrow_drop_down_24"-->
+<!--                        app:layout_constraintBottom_toBottomOf="@+id/titlePengobatanHivAids"-->
+<!--                        app:layout_constraintEnd_toEndOf="parent"-->
+<!--                        app:layout_constraintTop_toTopOf="@+id/titlePengobatanHivAids" />-->
+<!--                </androidx.constraintlayout.widget.ConstraintLayout>-->
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/clMencegahHivAidsKomplikasi"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:paddingStart="14dp"
-                    android:paddingTop="14dp"
-                    android:paddingBottom="10dp"
-                    android:background="@drawable/bg_card">
+<!--                <TextView-->
+<!--                    android:id="@+id/isiPengobatanHivAids"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginTop="-5dp"-->
+<!--                    android:background="@drawable/bg_teks_penjelasan"-->
+<!--                    android:paddingStart="12dp"-->
+<!--                    android:paddingTop="10dp"-->
+<!--                    android:paddingBottom="8dp"-->
+<!--                    android:text="@string/teks_full_pengobatan_hiv_aids"-->
+<!--                    android:textColor="@color/black"-->
+<!--                    android:textSize="14sp"-->
+<!--                    android:textStyle="normal"-->
+<!--                    android:visibility="gone" />-->
 
-                    <TextView
-                        android:id="@+id/titleMencegahHivAidsKomplikasi"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/arrowMencegahHivAidsKomplikasi"
-                        android:layout_marginEnd="8dp"
-                        android:text="@string/mencegah_hiv_aids_agar_tidak_komplikasi"
-                        android:textColor="@color/black"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        app:layout_constraintTop_toTopOf="parent" />
+<!--                <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--                    android:id="@+id/clMencegahHivAidsKomplikasi"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginTop="12dp"-->
+<!--                    android:paddingStart="14dp"-->
+<!--                    android:paddingTop="14dp"-->
+<!--                    android:paddingBottom="10dp"-->
+<!--                    android:background="@drawable/bg_card">-->
 
-                    <ImageView
-                        android:id="@+id/arrowMencegahHivAidsKomplikasi"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:background="@drawable/baseline_arrow_drop_down_24"
-                        app:layout_constraintBottom_toBottomOf="@+id/titleMencegahHivAidsKomplikasi"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="@+id/titleMencegahHivAidsKomplikasi" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
+<!--                    <TextView-->
+<!--                        android:id="@+id/titleMencegahHivAidsKomplikasi"-->
+<!--                        android:layout_width="0dp"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        app:layout_constraintStart_toStartOf="parent"-->
+<!--                        app:layout_constraintEnd_toStartOf="@+id/arrowMencegahHivAidsKomplikasi"-->
+<!--                        android:layout_marginEnd="8dp"-->
+<!--                        android:text="@string/mencegah_hiv_aids_agar_tidak_komplikasi"-->
+<!--                        android:textColor="@color/black"-->
+<!--                        android:textSize="16sp"-->
+<!--                        android:textStyle="bold"-->
+<!--                        app:layout_constraintTop_toTopOf="parent" />-->
 
-                <TextView
-                    android:id="@+id/isiMencegahHivAidsKomplikasi"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="-5dp"
-                    android:background="@drawable/bg_teks_penjelasan"
-                    android:paddingStart="12dp"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="8dp"
-                    android:text="@string/teks_full_mencegah_hiv_aids_agar_tidak_komplikasi"
-                    android:textColor="@color/black"
-                    android:textSize="14sp"
-                    android:textStyle="normal"
-                    android:visibility="gone" />
+<!--                    <ImageView-->
+<!--                        android:id="@+id/arrowMencegahHivAidsKomplikasi"-->
+<!--                        android:layout_width="40dp"-->
+<!--                        android:layout_height="40dp"-->
+<!--                        android:background="@drawable/baseline_arrow_drop_down_24"-->
+<!--                        app:layout_constraintBottom_toBottomOf="@+id/titleMencegahHivAidsKomplikasi"-->
+<!--                        app:layout_constraintEnd_toEndOf="parent"-->
+<!--                        app:layout_constraintTop_toTopOf="@+id/titleMencegahHivAidsKomplikasi" />-->
+<!--                </androidx.constraintlayout.widget.ConstraintLayout>-->
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/clUndangUndangKerahasiaanDataPasienHivAids"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:paddingStart="14dp"
-                    android:paddingTop="14dp"
-                    android:paddingBottom="10dp"
-                    android:background="@drawable/bg_card">
+<!--                <TextView-->
+<!--                    android:id="@+id/isiMencegahHivAidsKomplikasi"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginTop="-5dp"-->
+<!--                    android:background="@drawable/bg_teks_penjelasan"-->
+<!--                    android:paddingStart="12dp"-->
+<!--                    android:paddingTop="10dp"-->
+<!--                    android:paddingBottom="8dp"-->
+<!--                    android:text="@string/teks_full_mencegah_hiv_aids_agar_tidak_komplikasi"-->
+<!--                    android:textColor="@color/black"-->
+<!--                    android:textSize="14sp"-->
+<!--                    android:textStyle="normal"-->
+<!--                    android:visibility="gone" />-->
 
-                    <TextView
-                        android:id="@+id/titleUndangUndangKerahasiaanDataPasienHivAids"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/arrowUndangUndangKerahasiaanDataPasienHivAids"
-                        android:layout_marginEnd="8dp"
-                        android:text="@string/undang_undang_kerahasiaan_pasien"
-                        android:textColor="@color/black"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        app:layout_constraintTop_toTopOf="parent" />
+<!--                <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--                    android:id="@+id/clUndangUndangKerahasiaanDataPasienHivAids"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginTop="12dp"-->
+<!--                    android:paddingStart="14dp"-->
+<!--                    android:paddingTop="14dp"-->
+<!--                    android:paddingBottom="10dp"-->
+<!--                    android:background="@drawable/bg_card">-->
 
-                    <ImageView
-                        android:id="@+id/arrowUndangUndangKerahasiaanDataPasienHivAids"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:background="@drawable/baseline_arrow_drop_down_24"
-                        app:layout_constraintBottom_toBottomOf="@+id/titleUndangUndangKerahasiaanDataPasienHivAids"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="@+id/titleUndangUndangKerahasiaanDataPasienHivAids" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
+<!--                    <TextView-->
+<!--                        android:id="@+id/titleUndangUndangKerahasiaanDataPasienHivAids"-->
+<!--                        android:layout_width="0dp"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        app:layout_constraintStart_toStartOf="parent"-->
+<!--                        app:layout_constraintEnd_toStartOf="@+id/arrowUndangUndangKerahasiaanDataPasienHivAids"-->
+<!--                        android:layout_marginEnd="8dp"-->
+<!--                        android:text="@string/undang_undang_kerahasiaan_pasien"-->
+<!--                        android:textColor="@color/black"-->
+<!--                        android:textSize="16sp"-->
+<!--                        android:textStyle="bold"-->
+<!--                        app:layout_constraintTop_toTopOf="parent" />-->
 
-                <TextView
-                    android:id="@+id/isiUndangUndangKerahasiaanDataPasienHivAids"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="-5dp"
-                    android:background="@drawable/bg_teks_penjelasan"
-                    android:paddingStart="12dp"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="8dp"
-                    android:text="@string/teks_full_undang_undang_kerahasiaan_pasien"
-                    android:textColor="@color/black"
-                    android:textSize="14sp"
-                    android:textStyle="normal"
-                    android:visibility="gone" />
+<!--                    <ImageView-->
+<!--                        android:id="@+id/arrowUndangUndangKerahasiaanDataPasienHivAids"-->
+<!--                        android:layout_width="40dp"-->
+<!--                        android:layout_height="40dp"-->
+<!--                        android:background="@drawable/baseline_arrow_drop_down_24"-->
+<!--                        app:layout_constraintBottom_toBottomOf="@+id/titleUndangUndangKerahasiaanDataPasienHivAids"-->
+<!--                        app:layout_constraintEnd_toEndOf="parent"-->
+<!--                        app:layout_constraintTop_toTopOf="@+id/titleUndangUndangKerahasiaanDataPasienHivAids" />-->
+<!--                </androidx.constraintlayout.widget.ConstraintLayout>-->
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/clDataHivAidsDiParepare"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:paddingStart="14dp"
-                    android:paddingTop="14dp"
-                    android:paddingBottom="10dp"
-                    android:background="@drawable/bg_card">
+<!--                <TextView-->
+<!--                    android:id="@+id/isiUndangUndangKerahasiaanDataPasienHivAids"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginTop="-5dp"-->
+<!--                    android:background="@drawable/bg_teks_penjelasan"-->
+<!--                    android:paddingStart="12dp"-->
+<!--                    android:paddingTop="10dp"-->
+<!--                    android:paddingBottom="8dp"-->
+<!--                    android:text="@string/teks_full_undang_undang_kerahasiaan_pasien"-->
+<!--                    android:textColor="@color/black"-->
+<!--                    android:textSize="14sp"-->
+<!--                    android:textStyle="normal"-->
+<!--                    android:visibility="gone" />-->
 
-                    <TextView
-                        android:id="@+id/titleDataHivAidsDiParepare"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/arrowDataHivAidsDiParepare"
-                        android:layout_marginEnd="8dp"
-                        android:text="@string/data_hiv_aids_di_parepare"
-                        android:textColor="@color/black"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        app:layout_constraintTop_toTopOf="parent" />
+<!--                <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--                    android:id="@+id/clDataHivAidsDiParepare"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginTop="12dp"-->
+<!--                    android:paddingStart="14dp"-->
+<!--                    android:paddingTop="14dp"-->
+<!--                    android:paddingBottom="10dp"-->
+<!--                    android:background="@drawable/bg_card">-->
 
-                    <ImageView
-                        android:id="@+id/arrowDataHivAidsDiParepare"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:background="@drawable/baseline_arrow_drop_down_24"
-                        app:layout_constraintBottom_toBottomOf="@+id/titleDataHivAidsDiParepare"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="@+id/titleDataHivAidsDiParepare" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
+<!--                    <TextView-->
+<!--                        android:id="@+id/titleDataHivAidsDiParepare"-->
+<!--                        android:layout_width="0dp"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        app:layout_constraintStart_toStartOf="parent"-->
+<!--                        app:layout_constraintEnd_toStartOf="@+id/arrowDataHivAidsDiParepare"-->
+<!--                        android:layout_marginEnd="8dp"-->
+<!--                        android:text="@string/data_hiv_aids_di_parepare"-->
+<!--                        android:textColor="@color/black"-->
+<!--                        android:textSize="16sp"-->
+<!--                        android:textStyle="bold"-->
+<!--                        app:layout_constraintTop_toTopOf="parent" />-->
 
-                <TextView
-                    android:id="@+id/isiDataHivAidsDiParepare"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="-5dp"
-                    android:background="@drawable/bg_teks_penjelasan"
-                    android:paddingStart="12dp"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="8dp"
-                    android:text="@string/teks_full_data_hiv_aids_di_parepare"
-                    android:textColor="@color/black"
-                    android:textSize="14sp"
-                    android:textStyle="normal"
-                    android:visibility="gone" />
+<!--                    <ImageView-->
+<!--                        android:id="@+id/arrowDataHivAidsDiParepare"-->
+<!--                        android:layout_width="40dp"-->
+<!--                        android:layout_height="40dp"-->
+<!--                        android:background="@drawable/baseline_arrow_drop_down_24"-->
+<!--                        app:layout_constraintBottom_toBottomOf="@+id/titleDataHivAidsDiParepare"-->
+<!--                        app:layout_constraintEnd_toEndOf="parent"-->
+<!--                        app:layout_constraintTop_toTopOf="@+id/titleDataHivAidsDiParepare" />-->
+<!--                </androidx.constraintlayout.widget.ConstraintLayout>-->
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/clDataHivAidsDiIndonesia"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:paddingStart="14dp"
-                    android:paddingTop="14dp"
-                    android:paddingBottom="10dp"
-                    android:background="@drawable/bg_card">
+<!--                <TextView-->
+<!--                    android:id="@+id/isiDataHivAidsDiParepare"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginTop="-5dp"-->
+<!--                    android:background="@drawable/bg_teks_penjelasan"-->
+<!--                    android:paddingStart="12dp"-->
+<!--                    android:paddingTop="10dp"-->
+<!--                    android:paddingBottom="8dp"-->
+<!--                    android:text="@string/teks_full_data_hiv_aids_di_parepare"-->
+<!--                    android:textColor="@color/black"-->
+<!--                    android:textSize="14sp"-->
+<!--                    android:textStyle="normal"-->
+<!--                    android:visibility="gone" />-->
 
-                    <TextView
-                        android:id="@+id/titleDataHivAidsDiIndonesia"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/arrowDataHivAidsDiIndonesia"
-                        android:layout_marginEnd="8dp"
-                        android:text="@string/data_hiv_aids_di_indonesia_2022"
-                        android:textColor="@color/black"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        app:layout_constraintTop_toTopOf="parent" />
+<!--                <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--                    android:id="@+id/clDataHivAidsDiIndonesia"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginTop="12dp"-->
+<!--                    android:paddingStart="14dp"-->
+<!--                    android:paddingTop="14dp"-->
+<!--                    android:paddingBottom="10dp"-->
+<!--                    android:background="@drawable/bg_card">-->
 
-                    <ImageView
-                        android:id="@+id/arrowDataHivAidsDiIndonesia"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:background="@drawable/baseline_arrow_drop_down_24"
-                        app:layout_constraintBottom_toBottomOf="@+id/titleDataHivAidsDiIndonesia"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="@+id/titleDataHivAidsDiIndonesia" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
+<!--                    <TextView-->
+<!--                        android:id="@+id/titleDataHivAidsDiIndonesia"-->
+<!--                        android:layout_width="0dp"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        app:layout_constraintStart_toStartOf="parent"-->
+<!--                        app:layout_constraintEnd_toStartOf="@+id/arrowDataHivAidsDiIndonesia"-->
+<!--                        android:layout_marginEnd="8dp"-->
+<!--                        android:text="@string/data_hiv_aids_di_indonesia_2022"-->
+<!--                        android:textColor="@color/black"-->
+<!--                        android:textSize="16sp"-->
+<!--                        android:textStyle="bold"-->
+<!--                        app:layout_constraintTop_toTopOf="parent" />-->
 
-                <LinearLayout
-                    android:id="@+id/llDataHivAidsDiIndonesia"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="-5dp"
-                    android:background="@drawable/bg_teks_penjelasan"
-                    android:paddingStart="12dp"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="8dp"
-                    android:orientation="vertical"
-                    android:visibility="gone">
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="200dp"
-                        android:layout_marginBottom="10dp"
-                        android:src="@drawable/grafik_jumlah_kasus_hiv_aids_indonesia_2022"
-                        android:scaleType="fitXY"/>
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/teks_full_data_hiv_aids_di_indonesia_2022"
-                        android:textColor="@color/black"
-                        android:textSize="14sp"
-                        android:textStyle="normal"/>
-                </LinearLayout>
+<!--                    <ImageView-->
+<!--                        android:id="@+id/arrowDataHivAidsDiIndonesia"-->
+<!--                        android:layout_width="40dp"-->
+<!--                        android:layout_height="40dp"-->
+<!--                        android:background="@drawable/baseline_arrow_drop_down_24"-->
+<!--                        app:layout_constraintBottom_toBottomOf="@+id/titleDataHivAidsDiIndonesia"-->
+<!--                        app:layout_constraintEnd_toEndOf="parent"-->
+<!--                        app:layout_constraintTop_toTopOf="@+id/titleDataHivAidsDiIndonesia" />-->
+<!--                </androidx.constraintlayout.widget.ConstraintLayout>-->
 
-            </LinearLayout>
+<!--                <LinearLayout-->
+<!--                    android:id="@+id/llDataHivAidsDiIndonesia"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginTop="-5dp"-->
+<!--                    android:background="@drawable/bg_teks_penjelasan"-->
+<!--                    android:paddingStart="12dp"-->
+<!--                    android:paddingTop="10dp"-->
+<!--                    android:paddingBottom="8dp"-->
+<!--                    android:orientation="vertical"-->
+<!--                    android:visibility="gone">-->
+<!--                    <ImageView-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="200dp"-->
+<!--                        android:layout_marginBottom="10dp"-->
+<!--                        android:src="@drawable/grafik_jumlah_kasus_hiv_aids_indonesia_2022"-->
+<!--                        android:scaleType="fitXY"/>-->
+<!--                    <TextView-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:text="@string/teks_full_data_hiv_aids_di_indonesia_2022"-->
+<!--                        android:textColor="@color/black"-->
+<!--                        android:textSize="14sp"-->
+<!--                        android:textStyle="normal"/>-->
+<!--                </LinearLayout>-->
+
+<!--            </LinearLayout>-->
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

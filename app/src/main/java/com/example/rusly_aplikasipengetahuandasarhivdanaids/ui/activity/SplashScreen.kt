@@ -124,6 +124,6 @@ class SplashScreen : Activity() {
                 finish()
             }
 
-        }, 5000) // 5 detik
+        }, 6000) // 6 detik
     }
 }

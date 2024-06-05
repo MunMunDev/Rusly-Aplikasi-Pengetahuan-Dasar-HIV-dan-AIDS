@@ -51,7 +51,7 @@ class MessageKonsultasiAdapter(val context: Context, val messageList: List<Messa
             //Tampilkan Chat Pengirim
             val viewHolder = holder as SentViewHolder
             viewHolder.sentMessage.text = messageList[position].message
-            Log.d("MessageKonsultasiAdapter 1", "MessageKonsultasiAdapter 1: idSent: ${messageList[position].idSent} dan idReceived: ${messageList[position].idReceived}")
+            Log.d("MessageKonsultasi", "MessageKonsultasiAdapter 1: idSent: ${messageList[position].idSent} dan idReceived: ${messageList[position].idReceived}")
             var idMessage = messageList[position].idMessage
 
 
@@ -107,7 +107,7 @@ class MessageKonsultasiAdapter(val context: Context, val messageList: List<Messa
             //Tampilkan Chat Diterima
             val viewHolder = holder as ReceivedViewHolder
             viewHolder.receivedMessage.text = messageList[position].message
-            Log.d("MessageKonsultasiAdapter 2", "MessageKonsultasiAdapter 2: idSent: ${messageList[position].idSent} dan idReceived: ${messageList[position].idReceived}")
+            Log.d("MessageKonsultasi2", "MessageKonsultasiAdapter 2: idSent: ${messageList[position].idSent} dan idReceived: ${messageList[position].idReceived}")
 
         }
 

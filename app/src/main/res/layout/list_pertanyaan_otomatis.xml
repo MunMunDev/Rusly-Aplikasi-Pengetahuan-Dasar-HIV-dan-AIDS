@@ -3,22 +3,18 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/clListKonsultasi">
+    android:background="@drawable/bg_no_radius">
+
     <TextView
-        android:id="@+id/tvNama"
+        android:id="@+id/tvPertanyaan"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="14dp"
-        android:text="Nama Dokter"
+        android:text="Apakah tanda-tanda HIV/AIDS selalu muncul pada semua orang yang terinfeksi?"
         android:textColor="@color/black"
-        android:textSize="16sp"
-        android:textStyle="bold"/>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1.4dp"
-        app:layout_constraintTop_toBottomOf="@id/tvNama"
-        android:layout_marginTop="14dp"
-        android:background="@color/abuabu_muda"/>
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:layout_marginTop="6dp"
+        android:paddingBottom="6dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

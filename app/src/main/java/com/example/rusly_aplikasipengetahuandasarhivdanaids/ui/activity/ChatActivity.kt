@@ -1,28 +1,50 @@
 package com.example.rusly_aplikasipengetahuandasarhivdanaids.ui.activity
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Environment
+import android.provider.OpenableColumns
+import android.provider.Settings
 import android.util.Log
+import android.view.View
 import android.view.Window
 import android.view.WindowManager
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.rusly_aplikasipengetahuandasarhivdanaids.adapter.ListChatOtomatisAdapter
+import com.example.rusly_aplikasipengetahuandasarhivdanaids.adapter.ListPertanyaanOtomatisAdapter
 import com.example.rusly_aplikasipengetahuandasarhivdanaids.adapter.MessageKonsultasiAdapter
 import com.example.rusly_aplikasipengetahuandasarhivdanaids.data.database.firebase.FirebaseService
 import com.example.rusly_aplikasipengetahuandasarhivdanaids.data.database.retrofit.ApiService
+import com.example.rusly_aplikasipengetahuandasarhivdanaids.data.model.ChatOtomatisModel
 import com.example.rusly_aplikasipengetahuandasarhivdanaids.data.model.MessageModel
 import com.example.rusly_aplikasipengetahuandasarhivdanaids.data.model.NotificationModel
+import com.example.rusly_aplikasipengetahuandasarhivdanaids.data.model.PertanyaanOtomatisModel
 import com.example.rusly_aplikasipengetahuandasarhivdanaids.data.model.PushNotificationModel
 import com.example.rusly_aplikasipengetahuandasarhivdanaids.databinding.ActivityChatBinding
+import com.example.rusly_aplikasipengetahuandasarhivdanaids.databinding.AlertDialogKeteranganBinding
 import com.example.rusly_aplikasipengetahuandasarhivdanaids.utils.SharedPreferencesLogin
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -38,6 +60,8 @@ class ChatActivity : Activity() {
     lateinit var binding : ActivityChatBinding
     lateinit var sharedPref: SharedPreferencesLogin
     lateinit var database: DatabaseReference
+    lateinit var databaseChatOtomatis: DatabaseReference
+    lateinit var databasePertanyaanOtomatis: DatabaseReference
     lateinit var messageAdapter: MessageKonsultasiAdapter
     lateinit var messageArrayList : ArrayList<MessageModel>
     var idSent: String? = null
@@ -47,6 +71,10 @@ class ChatActivity : Activity() {
     var nama: String? = null
     var token: String? = null
     val TAG = "ChatActivity";
+
+    val STORAGE_PERMISSION_CODE = 10
+    val IMAGE_CODE = 11
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityChatBinding.inflate(layoutInflater)
@@ -55,19 +83,102 @@ class ChatActivity : Activity() {
         window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
         setContentView(view)
 
-        val bundle = intent.extras
-        sharedPref = SharedPreferencesLogin(this@ChatActivity)
-        database = FirebaseService().firebase().child("chats").child("message")
-
-        idSent = sharedPref.getId()
-        idReceived = bundle!!.getString("id").toString()
-        nama = bundle!!.getString("nama").toString()
-        token = bundle!!.getString("token").toString()
-
+        fetchChatKonsultasi()
+        fetchChatPertanyaanOtomatis()
+        fetchtPertanyaanOtomatis()
+        fetchDataSebelumnya()
+        setCheckJamOperasional()
+        setButton()
         hurufAcak()
 
-        binding.etMessage.requestFocus()
+        fetchChatPertanyaanOtomatis()
+    }
 
+    private fun fetchDataSebelumnya() {
+        binding.apply {
+            val bundle = intent.extras
+            sharedPref = SharedPreferencesLogin(this@ChatActivity)
+            idSent = sharedPref.getId()
+            idReceived = bundle!!.getString("id").toString()
+            nama = bundle!!.getString("nama").toString()
+            token = bundle!!.getString("token").toString()
+
+            tvNamaDokter.text = nama
+        }
+    }
+    private fun setButton() {
+        binding.apply {
+            ivBack.setOnClickListener{
+                finish()
+            }
+
+            btnInfoDontSendMessage.setOnClickListener{
+                llMessage.visibility = View.VISIBLE
+                llDontSendMessage.visibility = View.GONE
+
+                etMessage.requestFocus()
+            }
+
+            btnInfoChatOtomatis.setOnClickListener{
+                llMessage.visibility = View.GONE
+                llDontSendMessage.visibility = View.VISIBLE
+                llChatOtomatis.visibility = View.GONE
+                svPertanyaanOtomatis.visibility = View.GONE
+                rvListKonsultasiChatDokter.visibility = View.VISIBLE
+
+                etMessage.requestFocus()
+            }
+
+
+            btnSendMessage.setOnClickListener {
+                if(etMessage.text.trim().isNotEmpty()){
+                    // Kirim data
+                    database.addListenerForSingleValueEvent(object: ValueEventListener{
+                        override fun onDataChange(snapshot: DataSnapshot) {
+                            database.child("$senderRoom").child("idMessage").setValue(senderRoom)
+                            database.child("$senderRoom").child("message").setValue(etMessage.text.toString().trim())
+                            database.child("$senderRoom").child("idSent").setValue(idSent)
+                            database.child("$senderRoom").child("idReceived").setValue(idReceived)
+                            database.child("$senderRoom").child("tanggal").setValue(tanggalSekarangZonaMakassar())
+                            database.child("$senderRoom").child("waktu").setValue(waktuSekarangZonaMakassar())
+                            database.child("$senderRoom").child("ket").setValue("belum dibaca")
+
+                            postMessage(sharedPref.getNama(), etMessage.text.toString(), token.toString())
+
+                            etMessage.text = null
+                            hurufAcak()
+                        }
+
+                        override fun onCancelled(error: DatabaseError) {
+                            Toast.makeText(this@ChatActivity, "Gagal", Toast.LENGTH_SHORT).show()
+                        }
+
+                    })
+                }
+            }
+        }
+    }
+
+    private fun setCheckJamOperasional() {
+        val waktuZonaMakassar = waktuSekarangZonaMakassar().split(":")
+        val jam = waktuZonaMakassar[0].trim().toInt()
+        if(jam.toLong() >= 8.toLong() && jam.toLong() <= 16.toLong()){
+            binding.apply {
+                llMessage.visibility = View.VISIBLE
+                llDontSendMessage.visibility = View.GONE
+
+                etMessage.requestFocus()
+            }
+        } else{
+            binding.apply {
+                llMessage.visibility = View.GONE
+                llDontSendMessage.visibility = View.VISIBLE
+            }
+        }
+    }
+
+    private fun fetchChatKonsultasi(){
+        database = FirebaseService().firebase().child("chats").child("message")
         database.addValueEventListener(object: ValueEventListener{
             @SuppressLint("NotifyDataSetChanged")
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -108,25 +219,6 @@ class ChatActivity : Activity() {
                             valueKet = childWaktu
                         }
 
-//                        val currentChat = value.getValue(MessageModel::class.java)
-//
-//                        if(currentChat!!.idSent == idSent && currentChat.idReceived==idReceive){
-//                            valueMessage = currentChat.message
-//                            valueIdSent = currentChat.idSent
-//                            valueIdReceived = currentChat.idReceived
-//
-////                            Log.d(TAG, "onDataChange: Berhasil: ${currentChat!!.idSent} dan ${currentChat!!.idReceived}")
-////                            messageArrayList.add(currentChat!!)
-//                        }
-//                        else if(currentChat!!.idSent == idReceive && currentChat.idReceived==idSent){
-//                            valueMessage = currentChat.message
-//                            valueIdSent = currentChat.idSent
-//                            valueIdReceived = currentChat.idReceived
-//
-//                            Log.d(TAG, "onDataChange: Message: ${valueMessage}")
-//                            Log.d(TAG, "onDataChange: Username Send: ${valueIdSent}")
-//                            Log.d(TAG, "onDataChange: Username Received: ${valueIdReceived}")
-//                        }
                     }
                     if(valueMessage!!.isNotEmpty() && valueIdSent!!.isNotEmpty() && valueIdReceived!!.isNotEmpty()){
                         messageArrayList.add(
@@ -141,33 +233,10 @@ class ChatActivity : Activity() {
                             )
                         )
                     }
-//                    messageArrayList.add(MessageModel(valueMessage!!, valueIdSent!!, valueIdReceived!!))
-//                        messageArrayList[0] = MessageModel(valueMessage!!, valueIdSent!!, valueIdReceived!!)
-                    Log.d(TAG, "onDataChange 1: ${messageArrayList.size}")
-                    Log.d(TAG, "onDataChange 2: ${messageArrayList.size}")
-
-//                    val currentChat = value.getValue(MessageModel::class.java)
-//                    if(currentChat!!.idSent == sharedPref.getUsername() && currentChat!!.idSent == bundle!!.getString("id")){
-//                        messageArrayList.add(currentChat!!)
-//                        Log.d(TAG, "onData: ${currentChat.message} : ${currentChat.idSent} : ${currentChat.idReceived}")
-//                    }
-//                    Log.d(TAG, "onDataChange: ${messageArrayList.size} : ${messageArrayList}")
                 }
-                Log.d(TAG, "onDataChange: size: ${messageArrayList.size}")
-
                 val sorted = messageArrayList.sortedWith(compareBy { it.idMessage })
-                Log.d(TAG, "sorted: ")
-                for(i in sorted){
-                    Log.d(TAG, "sorted data: ${i.idMessage}, ${i.idReceived}, ${i.idSent}, ${i.message} ")
-                }
 
-//                messageAdapter = MessageKonsultasiAdapter(this@ChatActivity, messageArrayList, sharedPref.getId())
-                messageAdapter = MessageKonsultasiAdapter(this@ChatActivity, sorted, sharedPref.getId())
-
-                binding.rvListKonsultasiChatDokter.layoutManager = LinearLayoutManager(this@ChatActivity)
-                binding.rvListKonsultasiChatDokter.adapter = messageAdapter
-                binding.rvListKonsultasiChatDokter.scrollToPosition(messageArrayList.size-1)
-                messageAdapter.notifyDataSetChanged()
+                setAdapterChatKonsultasi(sorted)
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -175,56 +244,181 @@ class ChatActivity : Activity() {
             }
 
         })
+    }
+
+    private fun setAdapterChatKonsultasi(list: List<MessageModel>) {
+        val messageAdapter = MessageKonsultasiAdapter(this@ChatActivity, list, sharedPref.getId())
+
         binding.apply {
-            ivBack.setOnClickListener{
-                finish()
-            }
-            tvNamaDokter.text = nama
+            rvListKonsultasiChatDokter.layoutManager = LinearLayoutManager(this@ChatActivity)
+            rvListKonsultasiChatDokter.adapter = messageAdapter
+            rvListKonsultasiChatDokter.scrollToPosition(messageArrayList.size-1)
+            messageAdapter.notifyDataSetChanged()
+        }
+    }
 
-            btnSendMessage.setOnClickListener {
-                if(etMessage.text.trim().isNotEmpty()){
-                    // Kirim data
-//                    Toast.makeText(this@ChatActivity, "Terkirim", Toast.LENGTH_SHORT).show()
-                    database.addListenerForSingleValueEvent(object: ValueEventListener{
-                        override fun onDataChange(snapshot: DataSnapshot) {
-                            database.child("$senderRoom").child("idMessage").setValue(senderRoom)
-                            database.child("$senderRoom").child("message").setValue(etMessage.text.toString().trim())
-                            database.child("$senderRoom").child("idSent").setValue(idSent)
-                            database.child("$senderRoom").child("idReceived").setValue(idReceived)
-//                            database.child("$senderRoom").child("tanggal").setValue(tanggalSekarang())
-                            database.child("$senderRoom").child("tanggal").setValue(tanggalSekarangZonaMakassar())
-//                            database.child("$senderRoom").child("waktu").setValue(waktuSekarang())
-                            database.child("$senderRoom").child("waktu").setValue(waktuSekarangZonaMakassar())
-                            database.child("$senderRoom").child("ket").setValue("belum dibaca")
+    private fun fetchChatPertanyaanOtomatis(){
+        databaseChatOtomatis = FirebaseService().firebase().child("chats").child("pertanyaanOtomatis")
+        databaseChatOtomatis.addValueEventListener(object: ValueEventListener{
+            @SuppressLint("NotifyDataSetChanged")
+            override fun onDataChange(snapshot: DataSnapshot) {
+                var chatOtomatisArrayList : ArrayList<ChatOtomatisModel> = ArrayList()
+                for(value in snapshot.children){
+                    var valueIdPertanyaanOtomatis: String? = ""
+                    var valueIdSent: String? = ""
+                    var valuePertanyaan: String? = ""
+                    var valueJawaban: String? = ""
 
-                            postMessage(sharedPref.getNama(), etMessage.text.toString(), token.toString())
+                    for(valueKedua in value.children){
+                        val childIdPertanyaanOtomatis = value.child("idPertanyaanOtomatis").value.toString()
+                        val childIdSent = value.child("idSent").value.toString()
+                        val childPertanyaan = value.child("pertanyaan").value.toString()
+                        val childJawaban = value.child("jawaban").value.toString()
 
-                            etMessage.text = null
-                            hurufAcak()
+                        if(childIdSent == idSent){
+                            valueIdPertanyaanOtomatis = childIdPertanyaanOtomatis
+                            valueIdSent = childIdSent
+                            valuePertanyaan = childPertanyaan
+                            valueJawaban = childJawaban
                         }
+                    }
 
-                        override fun onCancelled(error: DatabaseError) {
-                            Toast.makeText(this@ChatActivity, "Gagal", Toast.LENGTH_SHORT).show()
-                        }
+                    if(valueIdSent!!.isNotEmpty()){
+                        chatOtomatisArrayList.add(
+                            ChatOtomatisModel(
+                                valueIdPertanyaanOtomatis.toString(),
+                                valueIdSent.toString(),
+                                "1",
+                                valuePertanyaan.toString(),
+                            )
+                        )
+                        chatOtomatisArrayList.add(
+                            ChatOtomatisModel(
+                                valueIdPertanyaanOtomatis.toString(),
+                                valueIdSent.toString(),
+                                "2",
+                                valueJawaban.toString(),
+                            )
+                        )
+                    }
+//                    messageArrayList.add(MessageModel(valueMessage!!, valueIdSent!!, valueIdReceived!!))
+//                        messageArrayList[0] = MessageModel(valueMessage!!, valueIdSent!!, valueIdReceived!!)
+                    Log.d(TAG, "onDataChange 1: ${chatOtomatisArrayList.size}")
+                    Log.d(TAG, "onDataChange 2: ${chatOtomatisArrayList.size}")
 
-                    })
                 }
+                Log.d(TAG, "onDataChange: size: ${chatOtomatisArrayList.size}")
+
+                val sorted = chatOtomatisArrayList.sortedWith(compareBy { it.idPertanyaanOtomatis })
+                Log.d(TAG, "sorted: ")
+                for(i in sorted){
+                    Log.d(TAG, "sorted data 23: ${i.idSent}, ${i.message}, ${i.idJenis}, ${i.idPertanyaanOtomatis} ")
+                }
+
+                setAdapterChatPertanyaanOtomatis(sorted)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Toast.makeText(this@ChatActivity, "Gagal", Toast.LENGTH_SHORT).show()
+            }
+
+        })
+    }
+
+    private fun setAdapterChatPertanyaanOtomatis(list: List<ChatOtomatisModel>){
+        val chatOtomatisAdapter = ListChatOtomatisAdapter(this@ChatActivity, list)
+
+        binding.apply {
+            rvListChatPertanyaan.layoutManager = LinearLayoutManager(this@ChatActivity)
+            rvListChatPertanyaan.adapter = chatOtomatisAdapter
+            rvListChatPertanyaan.scrollToPosition(list.size-1)
+            chatOtomatisAdapter.notifyDataSetChanged()
+        }
+    }
+
+    private fun fetchtPertanyaanOtomatis(){
+        databasePertanyaanOtomatis = FirebaseService().firebase().child("pertanyaan")
+        databasePertanyaanOtomatis.addValueEventListener(object: ValueEventListener{
+            @SuppressLint("NotifyDataSetChanged")
+            override fun onDataChange(snapshot: DataSnapshot) {
+                var pertanyaanOtomatisArrayList : ArrayList<PertanyaanOtomatisModel> = ArrayList()
+                for(value in snapshot.children){
+                    var valueIdPertanyaan: String? = ""
+                    var valuePertanyaan: String? = ""
+                    var valueJawaban: String? = ""
+
+                    for(valueKedua in value.children){
+                        val childIdPertanyaan = value.child("idPertanyaan").value.toString()
+                        val childPertanyaan = value.child("pertanyaan").value.toString()
+                        val childJawaban = value.child("jawaban").value.toString()
+
+                        valueIdPertanyaan = childIdPertanyaan
+                        valuePertanyaan = childPertanyaan
+                        valueJawaban = childJawaban
+                    }
+                    if(valuePertanyaan!!.isNotEmpty() && valueJawaban!!.isNotEmpty()){
+                        pertanyaanOtomatisArrayList.add(
+                            PertanyaanOtomatisModel(
+                                valueIdPertanyaan.toString(),
+                                valuePertanyaan.toString(),
+                                valueJawaban.toString()
+                            )
+                        )
+                    }
+                    Log.d(TAG, "onDataChange 1: ${pertanyaanOtomatisArrayList.size}")
+                    Log.d(TAG, "onDataChange 2: ${pertanyaanOtomatisArrayList.size}")
+
+                }
+                Log.d(TAG, "onDataChange: size: ${pertanyaanOtomatisArrayList.size}")
+
+                val sorted = pertanyaanOtomatisArrayList.sortedWith(compareBy { it.idPertanyaan })
+                Log.d(TAG, "sorted: ")
+                for(i in sorted){
+                    Log.d(TAG, "sorted data: ${i.idPertanyaan}, ${i.pertanyaan}, ${i.jawaban} ")
+                }
+
+                setAdapterPertanyaanOtomatis(sorted)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Toast.makeText(this@ChatActivity, "Gagal", Toast.LENGTH_SHORT).show()
+            }
+
+        })
+    }
+
+    private fun setAdapterPertanyaanOtomatis(sorted: List<PertanyaanOtomatisModel>) {
+        val pertanyaanOtomatisAdapter = ListPertanyaanOtomatisAdapter(this@ChatActivity, sorted, idSent!!)
+        binding.apply {
+            rvListPertanyaanOtomatis.layoutManager = LinearLayoutManager(this@ChatActivity)
+            rvListPertanyaanOtomatis.adapter = pertanyaanOtomatisAdapter
+            rvListPertanyaanOtomatis.scrollToPosition(sorted.size-1)
+            svPertanyaanOtomatis.fullScroll(sorted.size)
+        }
+        pertanyaanOtomatisAdapter.notifyDataSetChanged()
+    }
+
+    private fun setShowJudul(jam: String) {
+        val view = AlertDialogKeteranganBinding.inflate(layoutInflater)
+
+        val alertDialog = AlertDialog.Builder(this@ChatActivity)
+        alertDialog.setView(view.root)
+            .setCancelable(false)
+        val dialogInputan = alertDialog.create()
+        dialogInputan.show()
+
+        view.apply {
+            tvTitleKeterangan.text = "Jam Operasional"
+            tvBodyKeterangan.text = "Saran chat Dokter pada jam $jam"
+            btnClose.setOnClickListener {
+                dialogInputan.dismiss()
             }
         }
     }
 
     fun hurufAcak(){
 
-//        val dateTime = "${tanggalSekarang()}-${waktuSekarang()}"
         val dateTime = "${tanggalSekarangZonaMakassar()}-${waktuSekarangZonaMakassar()}"
-
-//        var str = "abcdefghijklmnopqrstuvwxyz1234567890"
-//        var hurufAcak = "1"
-//        for(i in 1..10){
-//            hurufAcak+=str.random()
-//        }
-//        this.senderRoom = "$idSent-$idReceive-$hurufAcak"
-//        this.receivedRoom = "$idReceive-$idSent-$hurufAcak"
 
         this.senderRoom = "${dateTime}--$idSent--$idReceived"
         this.receivedRoom = "${dateTime}--$idReceived--$idSent"
@@ -307,7 +501,7 @@ class ChatActivity : Activity() {
                     call: Call<PushNotificationModel>,
                     response: Response<PushNotificationModel>
                 ) {
-                    Toast.makeText(this@ChatActivity, "Berhasil", Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(this@ChatActivity, "Berhasil", Toast.LENGTH_SHORT).show()
                 }
 
                 override fun onFailure(
@@ -319,4 +513,6 @@ class ChatActivity : Activity() {
 
             })
     }
+
+
 }

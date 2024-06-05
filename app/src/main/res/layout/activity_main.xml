@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".ui.activity.user.MainActivity"
     android:id="@+id/drawerLayoutMain"
-    android:backgroundTint="@color/abuabau_muda_sekali">
+    android:backgroundTint="@color/abuabu_muda_sekali">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -52,7 +52,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginTop="6dp"
                 android:layout_marginBottom="6dp"
-                android:background="@color/abuabau_tua" />
+                android:background="@color/abuabu_tua" />
 
             <View
                 android:id="@+id/pembatasHorizontal"
@@ -61,7 +61,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 android:foregroundGravity="center"
-                android:background="@color/abuabau_tua" />
+                android:background="@color/abuabu_tua" />
 
             <LinearLayout
                 android:id="@+id/btnInformasiHivAids"

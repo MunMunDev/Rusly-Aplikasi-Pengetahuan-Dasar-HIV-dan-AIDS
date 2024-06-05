@@ -11,6 +11,7 @@ import android.widget.Toast
 import com.example.rusly_aplikasipengetahuandasarhivdanaids.data.database.firebase.FirebaseService
 import com.example.rusly_aplikasipengetahuandasarhivdanaids.data.model.UsersModel
 import com.example.rusly_aplikasipengetahuandasarhivdanaids.databinding.ActivityLoginBinding
+import com.example.rusly_aplikasipengetahuandasarhivdanaids.ui.activity.admin.AdminMainActivity
 import com.example.rusly_aplikasipengetahuandasarhivdanaids.ui.activity.admin.AdminSemuaUserActivity
 import com.example.rusly_aplikasipengetahuandasarhivdanaids.ui.activity.user.MainActivity
 import com.example.rusly_aplikasipengetahuandasarhivdanaids.utils.LoadingAlertDialog
@@ -135,7 +136,7 @@ class LoginActivity : Activity() {
                     Toast.makeText(this@LoginActivity, "$cekSebagai", Toast.LENGTH_SHORT).show()
                     if(cekSebagai == "admin"){
                         Toast.makeText(this@LoginActivity, "Berhasil Login", Toast.LENGTH_LONG).show()
-                        startActivity(Intent(this@LoginActivity, AdminSemuaUserActivity::class.java))
+                        startActivity(Intent(this@LoginActivity, AdminMainActivity::class.java))
                         loading.alertDialogCancel()
                     } else{
                         Toast.makeText(this@LoginActivity, "Berhasil Login", Toast.LENGTH_LONG).show()

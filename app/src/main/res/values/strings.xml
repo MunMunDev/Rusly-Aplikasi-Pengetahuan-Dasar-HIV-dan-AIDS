@@ -3,6 +3,11 @@
     <string name="login">Login</string>
     <string name="penjelasan_hiv_aids">Penjelasann HIV AIDS</string>
 
+    <string name="splash_screen_motivasi">
+        وَإِذَا مَرِضْتُ فَهُوَ يَشْفِينِ
+        \n“Dan apabila aku sakit, Dialah Yang menyembuhkan aku” (Qs.Asy-Syu’ara : 80)
+    </string>
+
     <string name="nama_konselor">Ns. ABD RISAL, S.KEP., M.Kep.</string>
     <string name="ttl">Kolonodale, 25 Mei 1983</string>
     <string name="alamat">Perumnas Wekke’e Blok C No.25 Parepare</string>
@@ -12,7 +17,14 @@
     <string name="sumber_data">-  Mengkaji HIV/AIDS dari teoritik hingga praktik\n
 -  Asuhan keperawatan pada pasien terinfeksi HIV/AIDS\n
 -  Bahan ajar AIDS pada asuhan kebidanan
-</string>
+    </string>
+
+    <string name="title_keterangan_tentang_aplikasi">Keterangan</string>
+    <string name="keterangan_tentang_aplikasi"> Aplikasi ini merupakan platform yang menyediakan informasi mengenai HIV/AIDS,
+        meliputi pengertian, sejarah, gejala, penularan, metode tes, pencegahan, dan pengobatan. Selain itu, aplikasi ini juga dilengkapi dengan
+        fitur konsultasi dokter untuk memberikan kesempatan kepada pengguna untuk berkonsultasi secara langsung dengan dokter/konselor  terkait masalah HIV/AIDS
+        yang mereka alami, serta menyediakan data terbaru mengenai HIV/AIDS
+    </string>
 
     <!-- Informasi HIV AIDS -->
 

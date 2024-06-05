@@ -11,10 +11,10 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.example.rusly_aplikasipengetahuandasarhivdanaids.R
 import com.example.rusly_aplikasipengetahuandasarhivdanaids.ui.activity.*
+import com.example.rusly_aplikasipengetahuandasarhivdanaids.ui.activity.admin.AdminInformasiHivAidsActivity
 import com.example.rusly_aplikasipengetahuandasarhivdanaids.ui.activity.admin.AdminMainActivity
 import com.example.rusly_aplikasipengetahuandasarhivdanaids.ui.activity.admin.AdminSemuaDokterActivity
 import com.example.rusly_aplikasipengetahuandasarhivdanaids.ui.activity.admin.AdminSemuaUserActivity
-import com.example.rusly_aplikasipengetahuandasarhivdanaids.ui.activity.admin.AdminSemuaUserDetailActivity
 import com.example.rusly_aplikasipengetahuandasarhivdanaids.ui.activity.user.MainActivity
 import com.example.rusly_aplikasipengetahuandasarhivdanaids.ui.activity.user.UpdateAkunActivity
 
@@ -104,6 +104,11 @@ class KontrolNavigationDrawer(var context: Context) {
                 when(it.itemId){
                     R.id.adminNavDrawerHome ->{
                         val intent = Intent(context, AdminMainActivity::class.java)
+                        context.startActivity(intent)
+                        activity.finish()
+                    }
+                    R.id.adminNavDrawerInformasi ->{
+                        val intent = Intent(Intent(context, AdminInformasiHivAidsActivity::class.java))
                         context.startActivity(intent)
                         activity.finish()
                     }

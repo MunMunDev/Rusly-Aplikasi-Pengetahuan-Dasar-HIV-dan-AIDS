@@ -15,6 +15,15 @@
         android:theme="@style/Theme.RuslyAplikasiPengetahuanDasarHIVDanAIDS"
         tools:targetApi="31">
         <activity
+            android:name=".ui.activity.admin.AdminPertanyaanOtomatisActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activity.admin.AdminInformasiHivAidsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activity.admin.AdminKonselorActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.activity.admin.AdminSemuaDokterDetailActivity"
             android:exported="false" />
         <activity

@@ -70,7 +70,7 @@ class AdminSemuaUserActivity : AppCompatActivity() {
                         usersArrayList.add(UsersModel(id, nama, umur.toInt(), username, password, sebagai, token))
                     }
                 }
-                Log.d("AdminSemuaUserActivityTAG", "onDataChange: $usersArrayList")
+                Log.d("AdminSemuaUserTAG", "onDataChange: $usersArrayList")
 
                 semuaUserAdapter = AdminListSemuaUserAdapter(usersArrayList, object : AdminListSemuaUserAdapter.onClick{
                     override fun ClickItem(data: UsersModel, it: View) {

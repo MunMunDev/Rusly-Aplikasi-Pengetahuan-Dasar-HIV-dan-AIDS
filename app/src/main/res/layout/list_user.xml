@@ -22,7 +22,7 @@
         app:layout_constraintTop_toBottomOf="@id/tvNama"
         android:layout_marginTop="6dp"
         android:text="24 Tahun"
-        android:textColor="@color/abuabau_tua"
+        android:textColor="@color/abuabu_tua"
         android:textSize="14sp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
